@@ -1,4 +1,4 @@
-import { getDocument } from 'pdfjs-dist';
+import { getDocument, type PDFDocumentProxy } from 'pdfjs-dist';
 
 export type PDFSourceDataOption = Parameters<typeof getDocument>[0];
 
@@ -27,10 +27,18 @@ export interface TouchCenter {
 
 
 export interface HookActions {
-  before_pdf_render?: () => Promise<void>
+  start_loading?: () => Promise<void>;
+  begin_insert_pages?: (total_num:number)=>void;
+  complete_loading?: (pages: PDFPage[], pdf_doc:PDFDocumentProxy, total_num:number) => Promise<void>;
+  start_rendering?: (page:PDFPage) => void;
+  end_rendering?: (page:PDFPage) => void;
 }
 
 export interface MobilePDFViewerConfig {
+  pdf_container_class?: string[];
+  transform_container_class?:string[];
+  page_container_class?: string[];
+  canvas_class?: string[];
   resolution_multiplier?: number;
-  hook_actions: HookActions
+  hook_actions?: HookActions;
 }

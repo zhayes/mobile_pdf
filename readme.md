@@ -63,8 +63,28 @@ new TouchManager(transform);
 const mobile_pdf = new MobilePDF(viewer.wrap_div, viewer.inner_div, {
   resolution_multiplier: 3,
   hook_actions: {
-    before_pdf_render: async () => {
+    start_loading: async () => {
+      // PDF 开始加载时触发，可用于显示加载动画
+      // Triggered when PDF loading starts, e.g. show loading spinner
+    },
+    begin_insert_pages: (total) => {
+      // PDF 解析完成，准备插入页面时触发，可用于初始化页面容器
+      // 此处建议重置 PDF 容器的位置和缩放比例，避免上次浏览状态影响新文档
+      // Triggered before inserting pages, e.g. initialize page containers
+      // It is recommended to reset the PDF container position and zoom here to avoid previous state affecting the new document
       transform.reset_transform();
+    },
+    complete_loading: async (pages, pdf_doc, total) => {
+      // 所有页面插入并加载完成后触发，可用于隐藏加载动画
+      // Triggered after all pages are loaded, e.g. hide loading spinner
+    },
+    start_rendering: (page) => {
+      // 单页开始渲染时触发
+      // Triggered when a page starts rendering
+    },
+    end_rendering: (page) => {
+      // 单页渲染完成时触发，可用于隐藏单页占位符
+      // Triggered when a page finishes rendering
     }
   }
 });
@@ -87,17 +107,35 @@ fileInput.addEventListener('change', async (e) => {
 ```ts
 new MobilePDF(wrapper_dom: HTMLElement, inner_dom: HTMLElement, config?: {
   resolution_multiplier?: number, // 渲染分辨率倍数，默认3 | Render resolution multiplier, default 3
-  hook_actions?: {
-    before_pdf_render?: () => Promise<void>
-  }
+  hook_actions?: HookActions
 })
 ```
 
 - `wrapper_dom`：外层容器 DOM | Outer wrapper DOM
 - `inner_dom`：内容容器 DOM | Content container DOM
 - `config`：配置对象 | Config object
-  - `resolution_multiplier`：渲染分辨率倍数，影响清晰度与性能 | Render resolution multiplier, affects clarity and performance
-  - `hook_actions.before_pdf_render`：PDF 渲染前钩子 | Hook before PDF render
+  - `resolution_multiplier`：渲染分辨率倍数，影响清晰度与性能，默认为3 | Render resolution multiplier, affects clarity and performance
+  - `hook_actions`：PDF 加载与渲染生命周期钩子 | PDF loading and rendering lifecycle hooks
+
+#### HookActions 生命周期钩子详细说明
+
+| 钩子名 | 触发时机 | 参数 | 说明 |
+| ------ | -------- | ---- | ---- |
+| `start_loading` | PDF 开始加载时 | 无 | **异步钩子**。可用于显示加载动画、禁用操作等。Promise resolve 后进入下一步。<br>_Triggered when PDF loading starts. Useful for showing loading indicators, disabling UI, etc. Returns a Promise; next step waits for its resolution._ |
+| `begin_insert_pages` | PDF 解析完成，准备插入页面时 | `total_num: number` | 可用于初始化页面容器、预分配资源等。**建议此时重置 PDF 容器位置和缩放比例，避免上次浏览状态影响新文档。**<br>_Triggered after PDF is parsed and before pages are inserted. Receives total page count. Useful for initializing page containers, pre-allocating resources, etc. **It is recommended to reset the PDF container position and zoom here to avoid previous state affecting the new document.**_ |
+| `complete_loading` | 所有页面插入并加载完成后 | `pages: PDFPage[]`, `pdf_doc: PDFDocumentProxy`, `total_num: number` | **异步钩子**。可用于隐藏加载动画、获取文档信息、统计分析等。Promise resolve 后进入下一步。<br>_Triggered after all pages are inserted and loaded. Receives array of page objects, PDF document proxy, and total page count. Useful for hiding loading indicators, accessing document info, analytics, etc. Returns a Promise._ |
+| `start_rendering` | 单页开始渲染时 | `page: PDFPage` | 可用于单页渲染前的处理，如显示占位符等。<br>_Triggered when a single page starts rendering. Receives the page object. Useful for per-page pre-render logic, such as showing placeholders._ |
+| `end_rendering` | 单页渲染完成时 | `page: PDFPage` | 可用于单页渲染后的处理，如隐藏占位符、上报渲染完成等。<br>_Triggered when a single page finishes rendering. Receives the page object. Useful for per-page post-render logic, such as hiding placeholders, reporting render completion, etc._ |
+
+- 其他配置项 | Other config options
+  - `pdf_container_class`：外层 PDF 容器的类名数组 | Class names for the outer PDF container (Array)
+  - `transform_container_class`：内容变换容器的类名数组 | Class names for the transform/content container (Array)
+    - ⚠️ 为了完整显示阴影效果，PDF 的内容器默认添加了 4px 的左右边距。如果需要修改该边距，可通过自定义 `transform_container_class` 类名覆盖相关样式。
+    - To fully display shadow effects, the PDF content container has a default 4px left and right margin. You can override this margin by customizing the style with your own `transform_container_class`.
+  - `page_container_class`：每一页外层容器的类名数组 | Class names for each page's wrapper (Array)
+  - `canvas_class`：每一页 canvas 的类名数组 | Class names for each page's canvas (Array)
+
+---
 
 ### PDFViewer
 

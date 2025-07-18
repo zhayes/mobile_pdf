@@ -22,9 +22,23 @@ class MobilePDF {
     this.wrapper_dom = wrapper_dom;
     this.inner_dom = inner_dom;
     this.config = Object.assign({resolution_multiplier: 3}, config);
+
+    this.add_class();
+  }
+
+  private add_class = ()=>{
+    if(this.config.pdf_container_class){
+      this.wrapper_dom.classList.add(...this.config.pdf_container_class);
+    }
+
+    if(this.config.transform_container_class){
+      this.inner_dom.classList.add(...this.config.transform_container_class);
+    }
   }
 
   public load_pdf = async(source: PDFSourceDataOption): Promise<void> => {
+
+    await this.config.hook_actions?.start_loading?.();
 
     this.cleanup_pdf();
 
@@ -41,16 +55,18 @@ class MobilePDF {
 
     this.base_scale = (wrapperWidth / viewport.width) * this.config.resolution_multiplier!;
 
-    await this.config.hook_actions.before_pdf_render?.();
-
     this.intersection_observer = this.create_observer();
 
+    this.config.hook_actions?.begin_insert_pages?.(this.total_pages);
+
     this.insert_page_doms(this.total_pages);
+
+    await this.config.hook_actions?.complete_loading?.(this.pages, this.pdf_doc, this.total_pages);
   }
 
   private create_null_page = (page_num:number):PDFPage => {
     const canvas_wrapper = window.document.createElement('div');
-    canvas_wrapper.classList.add('zha_mobile_pdf_canvas_wrapper');
+    canvas_wrapper.classList.add('zha_mobile_pdf_canvas_wrapper', ...(this.config.page_container_class || []));
     canvas_wrapper.style.height = '100vh';
     canvas_wrapper.dataset.page = page_num.toString();
 
@@ -81,9 +97,13 @@ class MobilePDF {
     if (!this.pdf_doc) return;
     pdf_page.render_status = 'loading';
 
+    this.config.hook_actions?.start_rendering?.(pdf_page);
+
     if (!pdf_page.canvas) {
       pdf_page.canvas = document.createElement('canvas');
-      pdf_page.canvas.style.width = '100%';
+      if(this.config.canvas_class){
+        pdf_page.canvas.classList.add(...this.config.canvas_class);
+      }
       pdf_page.canvas_wrapper.appendChild(pdf_page.canvas);
     }
 
@@ -93,7 +113,6 @@ class MobilePDF {
 
     pdf_page.canvas.width = viewport.width;
     pdf_page.canvas.height = viewport.height;
-    pdf_page.canvas.style.width = `100%`;
 
 
     await page.render({
@@ -104,6 +123,8 @@ class MobilePDF {
     page.cleanup();
 
     pdf_page.render_status = 'complete';
+
+    this.config.hook_actions?.end_rendering?.(pdf_page);
 
     if(pdf_page.canvas_wrapper) {
       pdf_page.canvas_wrapper.style.height = (viewport.height / this.config.resolution_multiplier!) + 'px';

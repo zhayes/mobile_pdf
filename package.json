@@ -1,20 +1,46 @@
 {
   "name": "mobile-pdf",
-  "private": true,
-  "version": "0.0.0",
+  "version": "0.0.1",
+  "description": "A mobile-friendly PDF viewer based on pdfjs-dist.",
+  "main": "dist/index.es.js",
+  "types": "dist/index.d.ts",
   "type": "module",
+  "files": [
+    "dist",
+    "readme.md"
+  ],
   "scripts": {
     "dev": "vite --host",
-    "build": "tsc && vite build",
+    "build": "tsc && vite build && rm -f dist/vite.svg",
     "preview": "vite preview"
   },
-  "devDependencies": {
-    "typescript": "~5.8.3",
-    "vite": "^7.0.4"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zhayes/mobile_pdf.git"
   },
-  "packageManager": "pnpm@10.3.0+sha1.6981f53a2d726323a7fd5f4ca5107102338511c8",
+  "keywords": [
+    "pdf",
+    "mobile",
+    "viewer",
+    "pdfjs",
+    "h5"
+  ],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zhayes/mobile_pdf/issues"
+  },
+  "homepage": "https://github.com/zhayes/mobile_pdf#readme",
+  "devDependencies": {
+    "@types/node": "^24.0.14",
+    "typescript": "~5.8.3",
+    "vite": "^7.0.4",
+    "vite-plugin-css-injected-by-js": "^3.5.2",
+    "vite-plugin-dts": "^4.5.4"
+  },
   "dependencies": {
     "pdfjs-dist": "5.3.93",
     "uid": "^2.0.2"
-  }
+  },
+  "packageManager": "pnpm@10.3.0+sha1.6981f53a2d726323a7fd5f4ca5107102338511c8"
 }

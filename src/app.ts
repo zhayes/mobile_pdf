@@ -1,6 +1,4 @@
-import './style.css'
 import { PDFViewer, TouchManager, MobilePDF, Transform } from './index';
-
 
 const get_mobile_pdf = () => {
 
@@ -15,7 +13,7 @@ const get_mobile_pdf = () => {
 
   const mobile_pdf = new MobilePDF(viewer.wrap_div!, viewer.inner_div!, {
     hook_actions: {
-      before_pdf_render: async () => {
+      begin_insert_pages: async () => {
         transform_instance.reset_transform();
       }
     }
