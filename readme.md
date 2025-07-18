@@ -118,6 +118,12 @@ new MobilePDF(wrapper_dom: HTMLElement, inner_dom: HTMLElement, config?: {
 ###### MobilePDF
 
 - `load_pdf(source)` — Load a PDF file
+  - `source`: PDF file source, supports:
+    - `ArrayBuffer` (binary data, e.g. from file input)
+    - `string` (URL or base64 string)
+    - `PDFDataRangeTransport` (see pdfjs documentation)
+    - Any type supported by [pdfjs getDocument](https://mozilla.github.io/pdf.js/api/draft/module-pdfjsLib.html#getDocument)
+  - Returns: `Promise<void>`
 
 ###### Transform
 
@@ -307,6 +313,12 @@ new MobilePDF(wrapper_dom: HTMLElement, inner_dom: HTMLElement, config?: {
 ###### MobilePDF
 
 - `load_pdf(source)` — 加载 PDF 文件
+  - `source`：PDF 文件来源，支持：
+    - `ArrayBuffer`（二进制数据，如 file input 读取）
+    - `string`（URL 或 base64 字符串）
+    - `PDFDataRangeTransport`（详见 pdfjs 文档）
+    - 以及 [pdfjs getDocument](https://mozilla.github.io/pdf.js/api/draft/module-pdfjsLib.html#getDocument) 支持的所有类型
+  - 返回：`Promise<void>`
 
 ###### Transform
 
