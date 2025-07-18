@@ -1,0 +1,3 @@
+
+export const DOUBLE_CLICK_TIMEOUT = 300;
+export const DOUBLE_CLICK_DISTANCE = 50;

@@ -1,0 +1,20 @@
+{
+  "name": "mobile-pdf",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "typescript": "~5.8.3",
+    "vite": "^7.0.4"
+  },
+  "packageManager": "pnpm@10.3.0+sha1.6981f53a2d726323a7fd5f4ca5107102338511c8",
+  "dependencies": {
+    "pdfjs-dist": "5.3.93",
+    "uid": "^2.0.2"
+  }
+}

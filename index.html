@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, i initial-=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, shrink-to-fit=no viewport-fit=cover" />
+    <title>Vite + TS</title>
+    <style>
+    *{
+        margin: 0px;
+        padding: 0px;
+    }
+
+    body{
+        background-color: #fff;
+    }
+    </style>
+  </head>
+  <!-- <script>
+  var script = document.createElement('script');
+  script.src = "https://cdn.jsdelivr.net/npm/eruda";
+
+  script.onload = function(){
+    if(window.eruda){
+      eruda.init();
+    }
+  }
+  document.head.appendChild(script);
+  </script> -->
+  <body>
+    <input type="file" id="file_input" />
+
+    <div id="app" style="background-color: #eaeaea; padding: 10px"></div>
+    <script type="module" src="/src/app.ts"></script>
+  </body>
+</html>
