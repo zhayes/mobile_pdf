@@ -103,6 +103,37 @@ new MobilePDF(wrapper_dom: HTMLElement, inner_dom: HTMLElement, config?: {
   - `resolution_multiplier`: Render resolution multiplier, affects clarity and performance, with a default value of 3
   - `hook_actions`: PDF loading and rendering lifecycle hooks
 
+##### Instance Methods & Properties
+
+###### PDFViewer
+
+- `wrap_div: HTMLDivElement` — Outer wrapper container
+- `inner_div: HTMLDivElement` — Content container
+
+###### TouchManager
+
+- `addEventListener()` — Bind gesture events
+- `removeEventListener()` — Remove gesture events
+
+###### MobilePDF
+
+- `load_pdf(source)` — Load a PDF file
+
+###### Transform
+
+- `set_dragging(value: boolean)`
+- `set_pinching(value: boolean)`
+- `get_dragging(): boolean`
+- `get_pinching(): boolean`
+- `get_translate(): { translate_x: number, translate_y: number }`
+- `get_scale(): number`
+- `transform(position?: { translate_x?: number, translate_y?: number, scale?: number })`
+- `reset_transform()`
+- `constrain_boundary(x: number, y: number): { translate_x: number, translate_y: number }`
+- `transform_el: HTMLElement` — The element being transformed
+- `wrapper_el: HTMLElement` — The outer wrapper element
+- `boundary: Boundary` — Boundary config
+
 #### HookActions Lifecycle Hooks
 
 | Hook Name | Trigger | Parameters | Description |
@@ -260,6 +291,37 @@ new MobilePDF(wrapper_dom: HTMLElement, inner_dom: HTMLElement, config?: {
 - `config`：配置对象
   - `resolution_multiplier`：渲染分辨率倍数，影响清晰度与性能，默认为3
   - `hook_actions`：PDF 加载与渲染生命周期钩子
+
+##### 实例方法与属性
+
+###### PDFViewer
+
+- `wrap_div: HTMLDivElement` — 外层包裹容器
+- `inner_div: HTMLDivElement` — 内容容器
+
+###### TouchManager
+
+- `addEventListener()` — 绑定手势事件
+- `removeEventListener()` — 移除手势事件
+
+###### MobilePDF
+
+- `load_pdf(source)` — 加载 PDF 文件
+
+###### Transform
+
+- `set_dragging(value: boolean)`
+- `set_pinching(value: boolean)`
+- `get_dragging(): boolean`
+- `get_pinching(): boolean`
+- `get_translate(): { translate_x: number, translate_y: number }`
+- `get_scale(): number`
+- `transform(position?: { translate_x?: number, translate_y?: number, scale?: number })`
+- `reset_transform()`
+- `constrain_boundary(x: number, y: number): { translate_x: number, translate_y: number }`
+- `transform_el: HTMLElement` — 变换目标元素
+- `wrapper_el: HTMLElement` — 外层包裹元素
+- `boundary: Boundary` — 边界参数
 
 #### HookActions 生命周期钩子详细说明
 
