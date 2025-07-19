@@ -1,4 +1,4 @@
-import { getDocument, type PDFDocumentProxy, GlobalWorkerOptions } from 'pdfjs-dist';
+import { getDocument, type PDFDocumentProxy, GlobalWorkerOptions, type PDFPageProxy } from 'pdfjs-dist';
 import { uid } from 'uid';
 
 import type { PDFSourceDataOption, PDFPage, MobilePDFViewerConfig } from "./types";
@@ -94,6 +94,7 @@ class MobilePDF {
   }
 
   private render_page = async(pdf_page: PDFPage) => {
+    let page: PDFPageProxy | null = null;
     try {
       if (!this.pdf_doc) return;
       pdf_page.render_status = 'loading';
@@ -102,17 +103,16 @@ class MobilePDF {
 
       if (!pdf_page.canvas) {
         pdf_page.canvas = document.createElement('canvas');
-        if(this.config.canvas_class){
+        if (this.config.canvas_class) {
           pdf_page.canvas.classList.add(...this.config.canvas_class);
         }
         pdf_page.canvas_wrapper.appendChild(pdf_page.canvas);
       }
 
-      const page = await this.pdf_doc.getPage(pdf_page.page);
+      page = await this.pdf_doc.getPage(pdf_page.page);
       const viewport = page.getViewport({ scale: this.base_scale });
 
       if (!pdf_page.canvas) {
-        page.cleanup();
         pdf_page.render_status = 'pending';
         return;
       }
@@ -128,19 +128,24 @@ class MobilePDF {
       });
 
       await pdf_page.rendering_task.promise;
-
-      page.cleanup();
+      pdf_page.rendering_task = null;
 
       if (pdf_page.canvas) {
         pdf_page.render_status = 'complete';
         this.config.hook_actions?.end_rendering?.(pdf_page);
       }
 
-      if(pdf_page.canvas_wrapper) {
+      if (pdf_page.canvas_wrapper) {
         pdf_page.canvas_wrapper.style.height = (viewport.height / this.config.resolution_multiplier!) + 'px';
       }
-    }catch(err){
-      //console.warn(err);
+    } catch (err) {
+      //渲染任务取消
+      //console.info(err);
+    } finally {
+      page?.cleanup();
+      if (pdf_page.rendering_task) {
+        pdf_page.rendering_task = null;
+      }
     }
   }
 

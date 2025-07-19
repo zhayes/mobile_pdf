@@ -1,6 +1,6 @@
 {
   "name": "mobile-pdf",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "A mobile-friendly PDF viewer based on pdfjs-dist.",
   "main": "dist/index.es.js",
   "types": "dist/index.d.ts",
