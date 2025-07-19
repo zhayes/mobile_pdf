@@ -97,7 +97,7 @@ export default class Transform {
 
 
     if (this.scale>1) {
-      translate_x = Math.max(wrapper_rect.left+wrapper_rect.width-this.boundary.right - transform_rect.width, Math.min(translate_x, this.boundary.left));
+      translate_x = Math.max(wrapper_rect.width - transform_rect.width - this.boundary.right, Math.min(translate_x, this.boundary.left));
     }
 
     if (this.scale<1) {

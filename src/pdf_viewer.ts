@@ -17,7 +17,6 @@ class PDFViewer {
     this.wrap_div.style.overflow = isPCByTouch() ? 'auto' : 'hidden';
 
     this.inner_div = document.createElement('div');
-    this.inner_div.style.margin = '0 4px';
 
     rootEl.appendChild(this.wrap_div);
     this.wrap_div.appendChild(this.inner_div);
