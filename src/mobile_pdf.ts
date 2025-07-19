@@ -176,7 +176,7 @@ class MobilePDF {
   };
 
 
-  private cleanup_pdf = () => {
+  cleanup_pdf = () => {
     this.cleanup_observer();
     if (this.pdf_doc) {
       this.pdf_doc.destroy();
@@ -187,7 +187,6 @@ class MobilePDF {
     try {
       this.inner_dom.replaceChildren();
     } catch (err) {
-      console.log('dom不支持replaceChildren方法')
       this.inner_dom.innerHTML = '';
     }
   };

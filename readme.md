@@ -74,7 +74,7 @@ const transform = new Transform(pdf_viewer.inner_div, pdf_viewer.wrap_div);
 const touch_manager = new TouchManager(transform);
 
 // Step 3: Create the PDF rendering engine
-const mobile_pdf = new MobilePDF(pdf_viewer.wrap_div, pdf_viewer.inner_div, {
+const mobile_pdf = new MobilePDF(pdf_viewer.inner_div, pdf_viewer.wrap_div, {
   resolution_multiplier: 3, // Higher value for sharper rendering
   hook_actions: {
     start_loading: async () => console.log('Loading started...'),
@@ -98,13 +98,14 @@ file_input.addEventListener('change', async (event) => {
 });
 
 // For Single Page Applications (SPAs) like React, Vue, etc.
-// It is crucial to clean up event listeners when the component unmounts.
+// It is crucial to clean up event listeners and the PDF instance when the component unmounts.
 //
 // Example for a React component:
 // useEffect(() => {
 //   // ... initialization code from above ...
 //   return () => {
-//     touch_manager.removeEventListener(); // Cleanup on unmount
+//     touch_manager.removeEventListener(); // Cleanup listeners
+//     mobile_pdf.cleanup_pdf();          // Cleanup PDF instance and DOM
 //   };
 // }, []);
 ```
@@ -144,6 +145,7 @@ The core class that handles the PDF rendering lifecycle.
 ##### Methods
 -   **`load_pdf(source: PDFSourceDataOption): Promise<void>`**: Asynchronously loads a PDF document.
     -   `source`: Can be a URL (`string`), `ArrayBuffer`, `Uint8Array`, or other formats supported by `pdfjs-dist`.
+-   **`cleanup_pdf()`**: Destroys the internal PDF document instance, removes all rendered page elements from the DOM, and disconnects the `IntersectionObserver`. This is crucial for freeing up memory and preventing leaks when the viewer is no longer needed.
 
 ##### Configuration (`MobilePDFViewerConfig`)
 
@@ -279,11 +281,12 @@ const root_element = document.getElementById('pdf-viewer');
 const pdf_viewer = new PDFViewer(root_element);
 
 // 步骤 2: 设置手势处理
-const transform = new Transform(pdf_viewer.inner_div, pdf_viewer.wrap_div);
+const transform = new Transform(pdf_viewer.inner_div, pdf_viewer.wrap_
+div);
 const touch_manager = new TouchManager(transform);
 
 // 步骤 3: 创建 PDF 渲染引擎
-const mobile_pdf = new MobilePDF(pdf_viewer.wrap_div, pdf_viewer.inner_div, {
+const mobile_pdf = new MobilePDF(pdf_viewer.inner_div, pdf_viewer.wrap_div, {
   resolution_multiplier: 3, // 更高的值可以获得更清晰的渲染效果
   hook_actions: {
     start_loading: async () => console.log('加载开始...'),
@@ -307,13 +310,14 @@ file_input.addEventListener('change', async (event) => {
 });
 
 // 对于单页应用 (SPA) 如 React, Vue 等
-// 在组件卸载时清理事件监听器至关重要。
+// 在组件卸载时清理事件监听器和 PDF 实例至关重要。
 //
 // React 组件示例:
 // useEffect(() => {
 //   // ... 以上初始化代码 ...
 //   return () => {
-//     touch_manager.removeEventListener(); // 在卸载时清理
+//     touch_manager.removeEventListener(); // 清理监听器
+//     mobile_pdf.cleanup_pdf();          // 清理 PDF 实例和 DOM
 //   };
 // }, []);
 ```
@@ -353,6 +357,7 @@ file_input.addEventListener('change', async (event) => {
 ##### 方法
 -   **`load_pdf(source: PDFSourceDataOption): Promise<void>`**: 异步加载一个 PDF 文档。
     -   `source`: 可以是 URL (`string`)、`ArrayBuffer`、`Uint8Array` 或 `pdfjs-dist` 支持的其他格式。
+-   **`cleanup_pdf()`**: 销毁内部的 PDF 文档实例，从 DOM 中移除所有已渲染的页面元素，并断开 `IntersectionObserver`。当不再需要查看器时，调用此方法对于释放内存和防止泄漏至关重要。
 
 ##### 配置 (`MobilePDFViewerConfig`)
 
@@ -416,6 +421,7 @@ file_input.addEventListener('change', async (event) => {
 监听用户的触摸事件并协调手势。构造函数会自动检测触摸支持。如果支持触摸，它会调用 `addEventListener()` 开始监听事件。
 
 -   **`transform_instance`**: 此管理器将要控制的 `Transform` 类的实例。
+
 
 ##### 方法
 -   **`addEventListener()`**: 将 `touchstart`、`touchmove` 和 `touchend` 事件监听器附加到变换元素上。在支持触摸的设备上，构造函数会自动调用它。
