@@ -1,4 +1,4 @@
-import { getDistance, getTouchCenter } from "./utils";
+import { getDistance, getTouchCenter, isPCByTouch } from "./utils";
 import Transform from "./transform";
 import { DOUBLE_CLICK_TIMEOUT, DOUBLE_CLICK_DISTANCE } from "./constants";
 
@@ -21,7 +21,7 @@ export default class TouchEventHandler {
 
   constructor(transform_instance: InstanceType<typeof Transform>) {
     this.transform_instance = transform_instance;
-    this.addEventListener();
+    !isPCByTouch() && this.addEventListener();
   }
 
   private touch_start = (e: TouchEvent) => {

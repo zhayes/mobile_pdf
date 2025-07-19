@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      mobile-pdf:
+        specifier: ^0.0.1
+        version: 0.0.1
       pdfjs-dist:
         specifier: 5.3.93
         version: 5.3.93
@@ -640,6 +643,9 @@ packages:
 
   mlly@1.7.4:
     resolution: {integrity: sha512-qmdSIPC4bDJXgZTCR7XosJiNKySV7O215tsPtDN9iEO/7q/76b/ijtgRu/+epFXSJhijtTCCGp3DWS549P3xKw==}
+
+  mobile-pdf@0.0.1:
+    resolution: {integrity: sha512-jfUg+rwuEnW0qYxc5dD2ACnu2NUh5GktAESw9ZFGprXe8aodlO5IpMrpgBp2HVTiAD4dz6aK5pfVfmvIcvFEdQ==}
 
   ms@2.1.3:
     resolution: {integrity: sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==}
@@ -1357,6 +1363,11 @@ snapshots:
       pathe: 2.0.3
       pkg-types: 1.3.1
       ufo: 1.6.1
+
+  mobile-pdf@0.0.1:
+    dependencies:
+      pdfjs-dist: 5.3.93
+      uid: 2.0.2
 
   ms@2.1.3: {}
 

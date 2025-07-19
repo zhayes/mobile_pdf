@@ -18,3 +18,8 @@ export const getTouchCenter = (touches: TouchList): TouchCenter => {
     y: (touches[0].clientY + touches[1].clientY) * 0.5
   };
 };
+
+
+export const isPCByTouch = ()=>{
+  return !('ontouchstart' in window) && !navigator.maxTouchPoints;
+}

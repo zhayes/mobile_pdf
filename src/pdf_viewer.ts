@@ -1,3 +1,5 @@
+import { isPCByTouch } from "./utils";
+
 class PDFViewer {
 
   public wrap_div: HTMLDivElement|null = null;
@@ -12,7 +14,7 @@ class PDFViewer {
 
     this.wrap_div.style.width = '100%';
     this.wrap_div.style.height = '100%';
-    this.wrap_div.style.overflow = 'hidden';
+    this.wrap_div.style.overflow = isPCByTouch() ? 'auto' : 'hidden';
 
     this.inner_div = document.createElement('div');
     this.inner_div.style.margin = '0 4px';
