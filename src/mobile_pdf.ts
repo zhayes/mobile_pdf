@@ -167,7 +167,7 @@ class MobilePDF {
         } else {
           if (current_page.canvas && this.pages.length>1) {
 
-            if (current_page.rendering_task) {
+            if (current_page.rendering_task && current_page.render_status === 'loading') {
               current_page.rendering_task.cancel();
               current_page.rendering_task = null;
             }
