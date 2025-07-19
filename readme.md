@@ -24,7 +24,6 @@ The library intelligently detects device capabilities. On touch-enabled devices,
 ### ✨ Features
 
 -   **📄 High-Performance Rendering**: Efficiently renders pages on demand, keeping the UI responsive and memory usage low.
--   **👆 Smart Interaction Mode**: Automatically enables touch gestures on mobile and standard scrollbar navigation on desktops.
 -   **🤏 Rich Gesture Support**: Provides smooth, intuitive touch gestures including pinch-to-zoom, drag-to-pan, and double-tap zoom.
 -   **🛠️ Modular & Extensible API**: A clean, decoupled architecture allows for easy customization and integration.
 -   **🎨 Customizable UI**: Easily style the viewer components by providing your own CSS classes.
@@ -235,7 +234,6 @@ This project is licensed under the MIT License.
 ### ✨ 功能特性
 
 -   **📄 高性能渲染**: 按需高效渲染页面，保持 UI 的响应速度和较低的内存占用。
--   **👆 智能交互模式**: 在移动设备上自动启用触摸手势，在桌面上自动启用标准滚动条导航。
 -   **🤏 丰富的手势支持**: 提供流畅、直观的触摸手势，包括双指缩放、拖拽平移和双击缩放。
 -   **🛠️ 模块化与可扩展 API**: 简洁、解耦的架构使得自定义和集成变得轻而易举。
 -   **🎨 可自定义 UI**: 通过提供自定义 CSS 类名，轻松为阅读器组件添加样式。
