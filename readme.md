@@ -177,7 +177,7 @@ The `PDFPage` object is passed as a parameter in several hooks and has the follo
 | `render_status` | `'pending'` &#124; `'loading'` &#124; `'complete'` | The current rendering status of the page.                                                                                                |
 | `page`          | `number`                                             | The page number (1-based).                                                                                                               |
 | `key`           | `string`                                             | A unique key for the page.                                                                                                               |
-| `render_task`   | `RenderTask` or `null`                               | A reference to the current rendering task from PDF.js. This is used to cancel the rendering if the page is scrolled out of view.          |
+| `rendering_task`   | `RenderTask` or `null`                               | A reference to the current rendering task from PDF.js. This is used to cancel the rendering if the page is scrolled out of view.          |
 
 ---
 
@@ -400,7 +400,7 @@ file_input.addEventListener('change', async (event) => {
 | `render_status` | `'pending'` &#124; `'loading'` &#124; `'complete'` | 页面的当前渲染状态。 |
 | `page` | `number` | 页码（从 1 开始）。 |
 | `key` | `string` | 页面的唯一键。 |
-| `render_task` | `RenderTask` 或 `null` | 来自 PDF.js 的当前渲染任务的引用。用于在页面滚出视野时取消渲染。 |
+| `rendering_task` | `RenderTask` 或 `null` | 来自 PDF.js 的当前渲染任务的引用。用于在页面滚出视野时取消渲染。 |
 
 ---
 
