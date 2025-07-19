@@ -94,40 +94,53 @@ class MobilePDF {
   }
 
   private render_page = async(pdf_page: PDFPage) => {
-    if (!this.pdf_doc) return;
-    pdf_page.render_status = 'loading';
+    try {
+      if (!this.pdf_doc) return;
+      pdf_page.render_status = 'loading';
 
-    this.config.hook_actions?.start_rendering?.(pdf_page);
+      this.config.hook_actions?.start_rendering?.(pdf_page);
 
-    if (!pdf_page.canvas) {
-      pdf_page.canvas = document.createElement('canvas');
-      if(this.config.canvas_class){
-        pdf_page.canvas.classList.add(...this.config.canvas_class);
+      if (!pdf_page.canvas) {
+        pdf_page.canvas = document.createElement('canvas');
+        if(this.config.canvas_class){
+          pdf_page.canvas.classList.add(...this.config.canvas_class);
+        }
+        pdf_page.canvas_wrapper.appendChild(pdf_page.canvas);
       }
-      pdf_page.canvas_wrapper.appendChild(pdf_page.canvas);
-    }
 
-    const page = await this.pdf_doc.getPage(pdf_page.page);
-    const viewport = page.getViewport({ scale: this.base_scale });
-    const can_context = pdf_page.canvas.getContext('2d')!;
+      const page = await this.pdf_doc.getPage(pdf_page.page);
+      const viewport = page.getViewport({ scale: this.base_scale });
 
-    pdf_page.canvas.width = viewport.width;
-    pdf_page.canvas.height = viewport.height;
+      if (!pdf_page.canvas) {
+        page.cleanup();
+        pdf_page.render_status = 'pending';
+        return;
+      }
 
+      const can_context = pdf_page.canvas.getContext('2d')!;
 
-    await page.render({
-      canvasContext: can_context,
-      viewport
-    }).promise;
+      pdf_page.canvas.width = viewport.width;
+      pdf_page.canvas.height = viewport.height;
 
-    page.cleanup();
+      pdf_page.rendering_task = page.render({
+        canvasContext: can_context,
+        viewport
+      });
 
-    pdf_page.render_status = 'complete';
+      await pdf_page.rendering_task.promise;
 
-    this.config.hook_actions?.end_rendering?.(pdf_page);
+      page.cleanup();
 
-    if(pdf_page.canvas_wrapper) {
-      pdf_page.canvas_wrapper.style.height = (viewport.height / this.config.resolution_multiplier!) + 'px';
+      if (pdf_page.canvas) {
+        pdf_page.render_status = 'complete';
+        this.config.hook_actions?.end_rendering?.(pdf_page);
+      }
+
+      if(pdf_page.canvas_wrapper) {
+        pdf_page.canvas_wrapper.style.height = (viewport.height / this.config.resolution_multiplier!) + 'px';
+      }
+    }catch(err){
+      //console.warn(err);
     }
   }
 
@@ -148,6 +161,12 @@ class MobilePDF {
           }
         } else {
           if (current_page.canvas && this.pages.length>1) {
+
+            if (current_page.rendering_task) {
+              current_page.rendering_task.cancel();
+              current_page.rendering_task = null;
+            }
+
             current_page.canvas.remove();
             current_page.canvas = null;
           }

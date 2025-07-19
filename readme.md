@@ -165,7 +165,19 @@ The core class that handles the PDF rendering lifecycle.
 | `begin_insert_pages`| `(total_pages: number) => void`| Fires after the PDF is parsed. Recommended place to reset transforms. |
 | `complete_loading`| `(pages, pdf_doc, total) => Promise<void>` | **Async**. Fires after all page placeholders are in the DOM. |
 | `start_rendering` | `(page: PDFPage) => void` | Fires just before a specific page begins to render. |
-| `end_rendering` | `(page: PDFPage) => void` | Fires after a specific page has finished rendering. |
+| `end_rendering` | `(page: PDFPage) => void` | Triggered after a specific page has finished rendering. |
+
+##### `PDFPage` Object Structure
+The `PDFPage` object is passed as a parameter in several hooks and has the following structure:
+
+| Key             | Type                                                 | Description                                                                                                                              |
+| :-------------- | :--------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------- |
+| `canvas`        | `HTMLCanvasElement` or `null`                        | The canvas element used to render the page. It's `null` if the page is not currently rendered.                                           |
+| `canvas_wrapper`| `HTMLDivElement`                                     | A wrapper element around the canvas.                                                                                                     |
+| `render_status` | `'pending'` &#124; `'loading'` &#124; `'complete'` | The current rendering status of the page.                                                                                                |
+| `page`          | `number`                                             | The page number (1-based).                                                                                                               |
+| `key`           | `string`                                             | A unique key for the page.                                                                                                               |
+| `render_task`   | `RenderTask` or `null`                               | A reference to the current rendering task from PDF.js. This is used to cancel the rendering if the page is scrolled out of view.          |
 
 ---
 
@@ -377,6 +389,18 @@ file_input.addEventListener('change', async (event) => {
 | `complete_loading`| `(pages, pdf_doc, total) => Promise<void>` | **异步**。在所有页面占位符都已添加到 DOM 后触发。 |
 | `start_rendering` | `(page: PDFPage) => void` | 在特定页面即将开始渲染之前触发。 |
 | `end_rendering` | `(page: PDFPage) => void` | 在特定页面完成渲染之后触发。 |
+
+##### `PDFPage` 对象结构
+`PDFPage` 对象作为参数在多个钩子中传递，包含以下属性：
+
+| 键 | 类型 | 描述 |
+| :--- | :--- | :--- |
+| `canvas` | `HTMLCanvasElement` 或 `null` | 用于渲染页面的 canvas 元素。如果页面当前未渲染，则为 `null`。 |
+| `canvas_wrapper` | `HTMLDivElement` | 包裹 canvas 的 div 元素。 |
+| `render_status` | `'pending'` &#124; `'loading'` &#124; `'complete'` | 页面的当前渲染状态。 |
+| `page` | `number` | 页码（从 1 开始）。 |
+| `key` | `string` | 页面的唯一键。 |
+| `render_task` | `RenderTask` 或 `null` | 来自 PDF.js 的当前渲染任务的引用。用于在页面滚出视野时取消渲染。 |
 
 ---
 

@@ -1,4 +1,4 @@
-import { getDocument, type PDFDocumentProxy } from 'pdfjs-dist';
+import { getDocument, type PDFDocumentProxy, type RenderTask } from 'pdfjs-dist';
 
 export type PDFSourceDataOption = Parameters<typeof getDocument>[0];
 
@@ -9,6 +9,7 @@ export interface PDFPage {
   render_status: 'pending' | 'loading' | 'complete';
   page: number;
   key: string;
+  rendering_task?: RenderTask|null;
 }
 
 export interface Boundary {
